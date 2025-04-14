@@ -4,6 +4,7 @@ import { changeBoardTitle, joinBoard, setCardsHidden } from "../database";
 import BoardData from "../types";
 import Button from "./Button.vue";
 import Column from "./Column.vue";
+import Timer from "./Timer.vue";
 
 const board = inject("board") as BoardData;
 const boardId = inject("boardId") as string;
@@ -69,7 +70,14 @@ watch(board, (newBoard) => {
     </section>
   </div>
   <section class="options">
-    <Button @click="toggleCardsHidden" :text="getToggleText()" />
+    <div class="options-container">
+      <Button @click="toggleCardsHidden" :text="getToggleText()" />
+    </div>
+  </section>
+  <section class="timer-section">
+    <div class="timer-wrapper">
+      <Timer />
+    </div>
   </section>
 </template>
 
@@ -101,8 +109,29 @@ input {
 }
 
 .options {
-  position: absolute;
+  position: fixed;
   right: 32px;
   top: 32px;
+  z-index: 100;
+}
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.timer-section {
+  position: fixed;
+  left: 32px;
+  top: 32px;
+  z-index: 100;
+}
+
+.timer-wrapper {
+  display: flex;
+  justify-content: center;
+  max-width: 200px;
 }
 </style>

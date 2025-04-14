@@ -120,6 +120,61 @@ export function changeBoardTitle(boardId: string, title: string) {
   update(board, { title });
 }
 
+export function startTimer(boardId: string, endTime: number) {
+  const timerRef = ref(database, `boards/${boardId}/timer`);
+  update(timerRef, { 
+    isRunning: true,
+    endTime: endTime
+  });
+}
+
+export function stopTimer(boardId: string, timeRemaining: number) {
+  const timerRef = ref(database, `boards/${boardId}/timer`);
+  update(timerRef, { 
+    isRunning: false,
+    timeRemaining: timeRemaining
+  });
+}
+
+export function resetTimer(boardId: string, duration: number) {
+  const timerRef = ref(database, `boards/${boardId}/timer`);
+  update(timerRef, { 
+    isRunning: false,
+    timeRemaining: duration
+  });
+}
+
+export function useTimer(boardId: string) {
+  const timer = reactive({
+    isRunning: false,
+    timeRemaining: 420, // Default 7 minutes
+    endTime: 0
+  });
+
+  onValue(
+    ref(database, `boards/${boardId}/timer`),
+    (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        timer.isRunning = data.isRunning || false;
+        
+        if (data.isRunning && data.endTime) {
+          // Calculate remaining time based on server end time
+          timer.endTime = data.endTime;
+          timer.timeRemaining = Math.max(0, Math.floor((data.endTime - Date.now()) / 1000));
+        } else if (data.timeRemaining !== undefined) {
+          timer.timeRemaining = data.timeRemaining;
+        }
+      }
+    },
+    (error) => {
+      console.error("Error fetching timer data:", error);
+    }
+  );
+
+  return timer;
+}
+
 export function addCard(boardId: string, columnId: string, card: CardDb) {
   const cards = ref(database, `boards/${boardId}/columns/${columnId}/cards`);
   push(cards, card);
