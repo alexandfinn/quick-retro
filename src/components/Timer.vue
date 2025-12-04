@@ -37,7 +37,7 @@ function startLocalTimer() {
   if (timerInterval !== null) {
     clearInterval(timerInterval);
   }
-  
+
   timerInterval = window.setInterval(() => {
     if (localTimeRemaining.value > 0) {
       localTimeRemaining.value--;
@@ -74,112 +74,44 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="timer-container">
-    <div 
-      class="timer-display" 
-      :class="{ 'timer-ending': localTimeRemaining <= 60, 'timer-running': timer.isRunning }"
+  <div
+    class="group flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/40 px-4 py-3 text-white shadow-lg shadow-black/30 backdrop-blur"
+  >
+    <div
+      class="timer-display flex items-center gap-2 rounded-xl px-3 py-2 text-lg font-semibold tracking-tight"
+      :class="{
+        'text-rose-200': localTimeRemaining <= 60,
+        'text-emerald-200': timer.isRunning,
+      }"
     >
+      <span
+        class="relative inline-flex h-2.5 w-2.5 rounded-full"
+        :class="timer.isRunning ? 'bg-emerald-300' : 'bg-white/60'"
+      >
+        <span
+          v-if="timer.isRunning"
+          class="absolute inset-0 animate-ping rounded-full bg-emerald-400/70"
+        ></span>
+      </span>
       {{ formatTime(localTimeRemaining) }}
     </div>
-    <div class="timer-controls">
-      <Button 
-        v-if="!timer.isRunning" 
-        @click="startTimer" 
-        text="Start" 
+    <div
+      class="timer-controls flex max-h-0 flex-wrap justify-center gap-2 opacity-0 transition-all duration-300 group-hover:max-h-40 group-hover:opacity-100"
+    >
+      <Button
+        v-if="!timer.isRunning"
+        @click="startTimer"
+        text="Start"
       />
-      <Button 
-        v-else 
-        @click="stopTimer" 
-        text="Stop" 
+      <Button
+        v-else
+        @click="stopTimer"
+        text="Stop"
       />
-      <Button 
-        @click="resetTimer" 
-        text="Reset" 
+      <Button
+        @click="resetTimer"
+        text="Reset"
       />
     </div>
   </div>
 </template>
-
-<style scoped>
-.timer-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 8px;
-  background-color: rgba(245, 245, 245, 0.8);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  cursor: pointer;
-  z-index: 10;
-  width: fit-content;
-  min-width: 80px;
-}
-
-.timer-container:hover {
-  background-color: rgba(245, 245, 245, 0.95);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.timer-display {
-  font-size: 18px;
-  font-weight: bold;
-  font-family: monospace;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.timer-ending {
-  color: #e53935;
-}
-
-.timer-running {
-  position: relative;
-}
-
-.timer-running::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -12px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #4caf50;
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.timer-controls {
-  display: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.timer-container:hover .timer-controls {
-  display: flex;
-  opacity: 1;
-  height: auto;
-  overflow: visible;
-}
-</style> 
