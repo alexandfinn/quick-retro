@@ -1,30 +1,34 @@
 <template>
-  <button @click="onClick">✖</button>
+  <button class="ghost" @click="onClick">✖</button>
 </template>
 
 <script setup lang="ts">
-const {color} = defineProps<{color?: string}>()
-const emit = defineEmits(['delete'])
+const { color } = defineProps<{ color?: string }>();
+const emit = defineEmits(["delete"]);
 
 function onClick(e: Event) {
-  e.stopPropagation()
-  emit('delete')
+  e.stopPropagation();
+  emit("delete");
 }
 </script>
 
 <style scoped>
-button {
-  position: absolute;
-  top: 4px;
-  right: 4px;
+.ghost {
   cursor: pointer;
   background-color: transparent;
-  border: 0;
+  border: 1px solid var(--border);
   color: v-bind(color || 'white');
-  display: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 120ms ease, background-color 120ms ease;
 }
 
-button:hover {
-  transform: scale(1.5);
+.ghost:hover {
+  background-color: rgba(15, 23, 42, 0.08);
+  transform: scale(1.05);
 }
 </style>

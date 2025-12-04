@@ -1,22 +1,32 @@
 <template>
-  <div class="board" :class="{ template: isTemplate }">
-    <DeleteButton v-if="!isTemplate" color="black" @click="onDelete"
-      >✖</DeleteButton
-    >
-    <h3>{{ board.title || "Untitled Retro" }}</h3>
-    <div class="columns">
+  <article class="board" :class="{ template: isTemplate }">
+    <div class="board__header">
+      <div class="stack">
+        <p class="eyebrow">{{ isTemplate ? "Template" : "Board" }}</p>
+        <h3>{{ board.title || "Untitled Retro" }}</h3>
+      </div>
+      <DeleteButton
+        v-if="!isTemplate"
+        color="black"
+        class="delete"
+        @click="onDelete"
+      >
+        ✖
+      </DeleteButton>
+    </div>
+
+    <div class="board__preview">
       <div
         class="column"
         v-for="column in board.columns"
-        v-bind:style="{ backgroundColor: column.color }"
-        :style="{
-          height: getColumnHeight(column),
-        }"
+        :key="column.title"
+        :style="{ backgroundColor: column.color, height: getColumnHeight(column) }"
       >
-        {{ column.title }}
+        <span>{{ column.title }}</span>
+        <span class="count" v-if="!isTemplate">{{ getColumnCount(column) }} cards</span>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <script setup lang="ts">
@@ -40,7 +50,6 @@ function onDelete(e: Event) {
 const largestColumn = computed(() => {
   let largestValue = 0;
   for (const columns of Object.values(board.columns)) {
-    console.log(columns);
     const numberOfCards = Object.keys(columns.cards ?? {}).length;
     if (numberOfCards > largestValue) {
       largestValue = numberOfCards;
@@ -62,61 +71,74 @@ function getColumnHeight(column: any) {
     minHeight
   }%`;
 }
+
+function getColumnCount(column: any) {
+  return Object.keys(column?.cards ?? {}).length;
+}
 </script>
 
 <style scoped>
-.board:hover button {
-  display: block;
-}
-
 .board {
   position: relative;
-  width: 300px;
-  height: 200px;
-  border: 2px solid rgba(105, 98, 98, 0.127);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
   user-select: none;
-  border-radius: 4px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: transform 160ms ease, box-shadow 160ms ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  gap: 16px;
-  padding: 16px;
-  font-weight: bold;
-  transition: all 0.2s ease-in-out;
-  background-color: #fff7f6;
+  gap: 14px;
 }
 
 .board:hover {
-  box-shadow: 0 0 8px rgba(47, 43, 43, 0.115);
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
 }
 
-.columns {
+.board__header {
   display: flex;
-  flex-direction: row;
-  gap: 4px;
-  flex: 1;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+h3 {
+  margin: 0;
+}
+
+.board__preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
   width: 100%;
 }
 
 .column {
-  background-color: red;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   color: white;
-  flex: 1;
-  padding: 8px;
-  min-width: 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  box-sizing: border-box;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-height: 80px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  text-align: left;
+  font-weight: 700;
+}
+
+.count {
+  font-size: 12px;
+  opacity: 0.85;
 }
 
 .template {
   border-style: dashed;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.delete {
+  position: static;
 }
 </style>
