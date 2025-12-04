@@ -11,7 +11,12 @@
       @focus="onFocus"
       @blur="onBlur"
     />
-    <button v-if="state.isFocused" class="save-button" @click="onSave">
+    <button
+      v-if="state.isFocused"
+      class="save-button"
+      @mousedown.prevent
+      @click="onSave"
+    >
       save
     </button>
   </div>
