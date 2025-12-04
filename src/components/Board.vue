@@ -49,89 +49,45 @@ watch(board, (newBoard) => {
 </script>
 
 <template>
-  <div class="board">
-    <input
-      :class="{ untitled: title === 'Untitled Retro' }"
-      v-model="title"
-      @keypress="onTitleKeyPress"
-      @focusout="onTitleBlur"
-      @focusin="onTitleFocus"
-    />
-    <section class="columns">
-      <Column
-        v-for="(column, columnId) in board.columns"
-        :cards="column.cards ?? []"
-        :column-id="String(columnId)"
-        :board-id="boardId"
-        :key="String(columnId)"
-        :title="column.title"
-        :color="column.color"
+  <div class="relative">
+    <div
+      class="relative flex w-full flex-col items-center gap-8 rounded-3xl border border-white/10 bg-white/5 p-6 shadow-soft backdrop-blur"
+    >
+      <input
+        :class="[
+          'w-full max-w-3xl rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-center text-2xl font-semibold text-white shadow-inner shadow-black/10 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-cyan-400 focus:shadow-soft',
+          title === 'Untitled Retro' ? 'text-slate-400' : 'text-white',
+        ]"
+        v-model="title"
+        @keypress="onTitleKeyPress"
+        @focusout="onTitleBlur"
+        @focusin="onTitleFocus"
       />
+      <section
+        class="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+      >
+        <Column
+          v-for="(column, columnId) in board.columns"
+          :cards="column.cards ?? []"
+          :column-id="String(columnId)"
+          :board-id="boardId"
+          :key="String(columnId)"
+          :title="column.title"
+          :color="column.color"
+        />
+      </section>
+    </div>
+    <section class="absolute right-0 top-0 z-20">
+      <div class="flex flex-col items-end gap-3">
+        <div class="rounded-xl border border-white/10 bg-white/10 px-3 py-2 shadow-soft backdrop-blur">
+          <Button @click="toggleCardsHidden" :text="getToggleText()" />
+        </div>
+      </div>
+    </section>
+    <section class="absolute left-0 top-0 z-20">
+      <div class="flex max-w-xs justify-center">
+        <Timer />
+      </div>
     </section>
   </div>
-  <section class="options">
-    <div class="options-container">
-      <Button @click="toggleCardsHidden" :text="getToggleText()" />
-    </div>
-  </section>
-  <section class="timer-section">
-    <div class="timer-wrapper">
-      <Timer />
-    </div>
-  </section>
 </template>
-
-<style scoped>
-input {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 32px;
-  outline: none;
-  text-align: center;
-  border: 0;
-  background-color: transparent;
-}
-
-.untitled {
-  color: #777777cb;
-}
-
-.columns {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
-}
-
-.board {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.options {
-  position: fixed;
-  right: 32px;
-  top: 32px;
-  z-index: 100;
-}
-
-.options-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: center;
-}
-
-.timer-section {
-  position: fixed;
-  left: 32px;
-  top: 32px;
-  z-index: 100;
-}
-
-.timer-wrapper {
-  display: flex;
-  justify-content: center;
-  max-width: 200px;
-}
-</style>

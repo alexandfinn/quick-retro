@@ -14,20 +14,19 @@ provide<BoardData>("board", board);
 </script>
 
 <template>
-  <main v-if="!board.loading">
+  <main
+    class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-10"
+    v-if="!board.loading"
+  >
     <Board v-if="board.exists" />
-    <div v-if="!board.exists">Couldn't find board</div>
+    <div
+      v-if="!board.exists"
+      class="rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-lg text-slate-200 shadow-soft backdrop-blur"
+    >
+      Couldn't find board
+    </div>
   </main>
-  <main v-if="board.loading">
+  <main class="flex items-center justify-center py-12" v-if="board.loading">
     <Spinner />
   </main>
 </template>
-
-<style scoped>
-main {
-  display: flex;
-  width: 100%;
-  padding: 32px;
-  box-sizing: border-box;
-}
-</style>

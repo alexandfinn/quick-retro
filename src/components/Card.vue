@@ -1,5 +1,6 @@
 <template>
-  <div class="card"
+  <div
+    class="card group relative w-full rounded-2xl border border-white/15 bg-white/10 p-5 text-left text-white shadow-soft backdrop-blur transition duration-150 hover:-translate-y-0.5 hover:border-white/25 hover:shadow-xl"
     v-if="!state.isEditing"
     draggable="true"
     @dragstart="onDragStart"
@@ -7,11 +8,17 @@
     @dragover="onDragOver"
     @click="setIsEditing"
     @drop="onDrop"
-    :style="{ visibility: state.isDragged ? 'hidden' : 'visible' }"
-    :class="{ hidden: !isCurrentUser && board?.cardsHidden }"
+    :style="{
+      backgroundColor: color,
+      cursor,
+      visibility: state.isDragged ? 'hidden' : 'visible',
+    }"
+    :class="{ 'opacity-30 blur-[1px]': !isCurrentUser && board?.cardsHidden }"
   >
     <DeleteButton @delete="onDelete(String(id))">✖</DeleteButton>
-    {{ props.text }}
+    <div class="whitespace-pre-line text-base leading-6">
+      {{ props.text }}
+    </div>
   </div>
   <CardInput
     v-else
@@ -104,27 +111,3 @@ function onDrop(e: DragEvent) {
 
 const cursor = computed(() => (isCurrentUser ? "text" : "default"));
 </script>
-
-<style scoped>
-.card:hover button {
-  display: block;
-}
-
-.card {
-  position: relative;
-  color: white;
-  font-weight: 500;
-  border-radius: 4px;
-  padding: 24px;
-  line-height: 24px;
-  background-color: v-bind(color);
-  text-align: left;
-  cursor: v-bind(cursor);
-  white-space: pre-line;
-}
-
-.hidden {
-  color: transparent;
-  text-shadow: 0 0 8px #fff;
-}
-</style>

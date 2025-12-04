@@ -1,7 +1,9 @@
 <template>
-  <div class="input-container">
+  <div
+    class="input-container relative overflow-hidden rounded-2xl border border-white/10 bg-black/20 shadow-inner shadow-black/40 backdrop-blur"
+  >
     <Input
-      class="input"
+      class="input !bg-transparent !text-white"
       ref="inputRef"
       v-model:value="state.inputText"
       type="textarea"
@@ -10,10 +12,20 @@
       @keydown="onInputKeyUp"
       @focus="onFocus"
       @blur="onBlur"
+      :style="{
+        '--n-border-radius': '16px',
+        '--n-color': 'transparent',
+        '--n-border': '1px solid transparent',
+        '--n-border-hover': '1px solid rgba(255,255,255,0.3)',
+        '--n-placeholder-color': 'rgba(255,255,255,0.55)',
+        '--n-text-color': '#fff',
+        '--n-box-shadow-focus': '0 10px 40px rgba(0,0,0,0.25)',
+      }"
     />
     <button
       v-if="state.isFocused"
-      class="save-button"
+      class="save-button absolute bottom-3 right-3 rounded-xl px-3 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-lg transition hover:-translate-y-[1px] hover:opacity-100"
+      :style="{ backgroundColor: color }"
       @mousedown.prevent
       @click="onSave"
     >
@@ -76,34 +88,3 @@ if (autofocus) {
   });
 }
 </script>
-
-<style>
-.input {
-  padding: 16.5px;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: left;
-}
-
-.input-container {
-  position: relative;
-}
-
-.save-button {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: v-bind(color);
-  color: white;
-  border: 0;
-  font-weight: 500;
-  border-radius: 4px;
-  margin: 4px;
-  cursor: pointer;
-  padding: 2px 8px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-}
-</style>
