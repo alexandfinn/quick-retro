@@ -1,44 +1,26 @@
 <template>
-  <div class="container mx-auto flex max-w-6xl flex-col items-center px-6 py-12">
-    <main
-      class="w-full rounded-[32px] border border-white/10 bg-white/5 px-8 py-10 shadow-soft backdrop-blur"
-    >
-      <div class="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <p class="text-sm uppercase tracking-[0.25em] text-cyan-200">retro toolkit</p>
-          <h1 class="text-3xl font-bold text-white md:text-4xl">
-            🚀 quick retro {{ isTesting ? "(emulated)" : "" }}🚀
-          </h1>
-        </div>
-        <span class="rounded-full bg-cyan-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-cyan-100">
-          realtime boards
-        </span>
-      </div>
-
-      <div class="mt-10">
-        <h2 class="text-2xl font-semibold text-white">Start a new board</h2>
-        <section class="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <BoardCard
-            v-for="template in templates"
-            @click="createNewBoard(template)"
-            :board="template"
-            :is-template="true"
-          />
-        </section>
-      </div>
-
-      <div class="mt-10">
-        <h2 class="text-2xl font-semibold text-white">Your boards</h2>
-        <section class="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <BoardCard
-            v-for="(board, boardId) in ownBoards"
-            @click="navigateToBoard(boardId as unknown as string)"
-            @delete="onDeleteBoard(boardId as unknown as string)"
-            :board="board"
-            :is-template="false"
-          />
-        </section>
-      </div>
+  <div class="container">
+    <main>
+      <h1>🚀 quick retro {{ isTesting ? "(emulated)" : "" }}🚀</h1>
+      <h2>start a new board</h2>
+      <section>
+        <BoardCard
+          v-for="template in templates"
+          @click="createNewBoard(template)"
+          :board="template"
+          :is-template="true"
+        />
+      </section>
+      <h2>your boards</h2>
+      <section>
+        <BoardCard
+          v-for="(board, boardId) in ownBoards"
+          @click="navigateToBoard(boardId as unknown as string)"
+          @delete="onDeleteBoard(boardId as unknown as string)"
+          :board="board"
+          :is-template="false"
+        />
+      </section>
     </main>
   </div>
 </template>
@@ -72,3 +54,46 @@ async function createNewBoard(template: Template) {
   if (boardId) navigateToBoard(boardId);
 }
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+main {
+  max-width: 1200px;
+}
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 32px;
+}
+
+main {
+  padding: 32px;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 32px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 32px;
+}
+</style>

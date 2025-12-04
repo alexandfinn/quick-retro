@@ -1,27 +1,19 @@
 <template>
-  <div
-    class="board group relative flex h-56 w-full cursor-pointer flex-col justify-between gap-4 overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 text-left shadow-lg shadow-black/20 transition hover:-translate-y-1 hover:border-white/20 hover:bg-white/10 hover:shadow-soft"
-    :class="{ template: isTemplate }"
-  >
-    <DeleteButton v-if="!isTemplate" color="white" @click="onDelete">✖</DeleteButton>
-    <div class="flex flex-col gap-2">
-      <h3 class="text-xl font-semibold text-white">
-        {{ board.title || "Untitled Retro" }}
-      </h3>
-      <p class="text-xs uppercase tracking-[0.18em] text-white/70">
-        {{ isTemplate ? "Template" : "Board" }}
-      </p>
-    </div>
-    <div class="columns flex flex-1 flex-row items-end gap-2">
+  <div class="board" :class="{ template: isTemplate }">
+    <DeleteButton v-if="!isTemplate" color="black" @click="onDelete"
+      >✖</DeleteButton
+    >
+    <h3>{{ board.title || "Untitled Retro" }}</h3>
+    <div class="columns">
       <div
-        class="column flex-1 rounded-lg px-3 py-2 text-xs font-semibold text-white shadow-md"
+        class="column"
         v-for="column in board.columns"
         v-bind:style="{ backgroundColor: column.color }"
         :style="{
           height: getColumnHeight(column),
         }"
       >
-        <div class="truncate">{{ column.title }}</div>
+        {{ column.title }}
       </div>
     </div>
   </div>
@@ -71,3 +63,60 @@ function getColumnHeight(column: any) {
   }%`;
 }
 </script>
+
+<style scoped>
+.board:hover button {
+  display: block;
+}
+
+.board {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  border: 2px solid rgba(105, 98, 98, 0.127);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 16px;
+  padding: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  background-color: #fff7f6;
+}
+
+.board:hover {
+  box-shadow: 0 0 8px rgba(47, 43, 43, 0.115);
+  transform: scale(1.05);
+}
+
+.columns {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  flex: 1;
+  width: 100%;
+}
+
+.column {
+  background-color: red;
+  border-radius: 4px;
+  color: white;
+  flex: 1;
+  padding: 8px;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.template {
+  border-style: dashed;
+}
+</style>

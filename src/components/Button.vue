@@ -1,7 +1,5 @@
 <template>
-  <button
-    class="inline-flex min-w-[180px] items-center justify-center rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white shadow-soft transition hover:-translate-y-[1px] hover:border-cyan-300/60 hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
-  >
+  <button>
     {{ text }}
   </button>
 </template>
@@ -9,3 +7,18 @@
 <script setup lang="ts">
 const { text } = defineProps<{ text: string }>();
 </script>
+
+<style scoped>
+button {
+  width: 200px;
+  border: 2px solid rgb(47, 43, 43);
+  color: rgb(47, 43, 43);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+</style>
