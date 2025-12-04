@@ -18,6 +18,7 @@ button {
   padding: 8px 16px;
   text-transform: uppercase;
   font-weight: bold;
-  background-color: transparent;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 </style>

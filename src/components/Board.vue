@@ -50,13 +50,21 @@ watch(board, (newBoard) => {
 
 <template>
   <div class="board">
-    <input
-      :class="{ untitled: title === 'Untitled Retro' }"
-      v-model="title"
-      @keypress="onTitleKeyPress"
-      @focusout="onTitleBlur"
-      @focusin="onTitleFocus"
-    />
+    <div class="board-header">
+      <div class="timer-wrapper">
+        <Timer />
+      </div>
+      <input
+        :class="{ untitled: title === 'Untitled Retro' }"
+        v-model="title"
+        @keypress="onTitleKeyPress"
+        @focusout="onTitleBlur"
+        @focusin="onTitleFocus"
+      />
+      <div class="options-container">
+        <Button @click="toggleCardsHidden" :text="getToggleText()" />
+      </div>
+    </div>
     <section class="columns">
       <Column
         v-for="(column, columnId) in board.columns"
@@ -69,23 +77,12 @@ watch(board, (newBoard) => {
       />
     </section>
   </div>
-  <section class="options">
-    <div class="options-container">
-      <Button @click="toggleCardsHidden" :text="getToggleText()" />
-    </div>
-  </section>
-  <section class="timer-section">
-    <div class="timer-wrapper">
-      <Timer />
-    </div>
-  </section>
 </template>
 
 <style scoped>
 input {
   font-size: 32px;
   font-weight: bold;
-  margin-bottom: 32px;
   outline: none;
   text-align: center;
   border: 0;
@@ -106,32 +103,36 @@ input {
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 24px;
 }
 
-.options {
-  position: fixed;
-  right: 32px;
-  top: 32px;
-  z-index: 100;
+.board-header {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  z-index: 2;
+}
+
+.board-header input {
+  margin: 0 auto;
+  width: 100%;
 }
 
 .options-container {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: center;
-}
-
-.timer-section {
-  position: fixed;
-  left: 32px;
-  top: 32px;
-  z-index: 100;
+  justify-content: flex-end;
 }
 
 .timer-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   max-width: 200px;
 }
 </style>
